@@ -1,7 +1,7 @@
 # Sprint 2 plan
 
 - Period: 2026-10-19 to 2026-11-09 (3 weeks)
-- Status: active
+- Status: complete (see `reviews/sprint-2-review.md`)
 - Tracking: `Sprint 2` milestone in platform-docs and formula-insights-api
 
 ## Goal
