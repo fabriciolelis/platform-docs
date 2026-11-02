@@ -36,18 +36,17 @@ flowchart TB
         argocd --> cluster
         cluster --> cronjob
         cluster --> service
-        cronjob -->|upsert| manageddb[(PostgreSQL)]
-        service -->|read| manageddb
+        cronjob -->|upsert| clusterdb[(PostgreSQL\nin-cluster, disposable data)]
+        service -->|read| clusterdb
         cronjob --> observability
         service --> observability
     end
 
     subgraph foundations[Later cloud foundations]
         terraform[platform-infrastructure\nTerraform]
-        aws[AWS networking, identity,\nand managed services]
+        aws[AWS networking\nand identity]
         terraform --> aws
         aws -. hosts .-> cluster
-        aws -. provides .-> manageddb
     end
 
     docs[platform-docs\nADRs · SLOs · runbooks · reviews]
@@ -62,7 +61,7 @@ flowchart TB
 
     class importer,database,api active;
     class source,consumer external;
-    class ci,registry,gitops,argocd,cluster,cronjob,service,observability,terraform,aws,manageddb future;
+    class ci,registry,gitops,argocd,cluster,cronjob,service,observability,terraform,aws,clusterdb future;
     class docs docs;
 ```
 
