@@ -37,7 +37,27 @@ the scope, the decisions on its open questions, and the exit criteria.
   persistent, so ADR-007's migration and application roles arrive with the
   first persistent environment.
 - **Backfill:** a documented `kubectl create job` command, not a committed
-  Job manifest.
+  Job manifest. A plain `create job --from=cronjob/...` keeps the CronJob's
+  `current` argument and 30-minute deadline, so the command renders that Job
+  and overrides only the season range and the deadline (4 hours), keeping the
+  same image, Secret, and securityContext (`SPEC.md`, Commands).
+
+## Further decisions (2026-11-13)
+
+- **Non-root:** the image sets UID 10001 (formula-insights-api#28), and the
+  pod spec still requires `runAsNonRoot` with `runAsUser: 10001`.
+- **Ingestion signal:** until metrics arrive in Sprint 4, the signal is the
+  condition of each daily import's Job (`Complete` or `Failed`, a deadline
+  exceeded or a partial run counting as failed), plus one JSON summary log line
+  per import with the reason (formula-insights-api#33). The ingestion
+  success-rate SLO is measured over the Job condition.
+- **Rollback:** a PR that reverts the promotion; it may be merged without
+  review while the service is down. The schema is never reverted (ADR-007).
+- **Required check:** the platform-gitops validation job becomes a required
+  status check on `main` once it exists; with no required review, it is the
+  only gate between a PR and the cluster.
+- **Vocabulary:** terms are defined in `GLOSSARY.md`; ADR-007 gained an update
+  confirming that `local` is not a persistent environment.
 
 ## Out of scope
 
