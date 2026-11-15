@@ -30,6 +30,10 @@ _Avoid_: Refresh, reload
 
 ## Delivery
 
+**Bootstrap**:
+The one-time manual setup that lets a new cluster follow Git; after it, everything that runs in the environment comes from Git (ADR-008).
+_Avoid_: Install, provisioning
+
 **Environment**:
 A named target that Formula Insights is deployed to from Git: `local` (k3d on the maintainer's machine) now, `dev` (the AWS lab) later.
 _Avoid_: Stage, cluster
