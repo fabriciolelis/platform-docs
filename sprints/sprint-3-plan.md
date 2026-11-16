@@ -1,7 +1,7 @@
 # Sprint 3 plan
 
 - Period: 2026-11-03 to 2026-11-24 (3 weeks)
-- Status: active
+- Status: complete (see `reviews/sprint-3-review.md`)
 - Tracking: `Sprint 3` milestone in platform-docs, formula-insights-api, and platform-gitops
 
 ## Goal
