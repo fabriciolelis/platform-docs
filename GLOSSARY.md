@@ -21,7 +21,7 @@ A manual, paced import of historical seasons, always run as a single season rang
 _Avoid_: Historical load, full import
 
 **Ingestion signal**:
-The success or failure outcome of each daily import, with its reason; the ingestion success-rate SLO is measured over it.
+The success or failure outcome of each daily import, with its reason; a day without a daily import counts as a failure. The ingestion success-rate SLO is measured over it; manual imports do not count.
 _Avoid_: Import metric, ingestion status
 
 **Re-import**:

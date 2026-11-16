@@ -74,7 +74,7 @@ The initial development environment may run locally with Kind or k3d. Cloud depl
 | --- | --- | --- |
 | API availability | 99.5% per 30 days | successful probe requests / all probe requests, from a synthetic probe calling the readiness endpoint (including the database) every 30 seconds; the share of non-5xx responses in the API's request metrics is a secondary signal |
 | API latency | 95% of read requests below 500 ms | API request-duration histogram |
-| Ingestion success rate | at least 96% of scheduled daily runs per 30 days (29 of 30) | job exit status; any non-zero exit, including standings not updated, counts as failed |
+| Ingestion success rate | at least 96% of scheduled daily runs per 30 days (29 of 30) | the ingestion signal: the final status of each scheduled daily import Job, retries included; any non-zero exit, including standings not updated, and a day without a scheduled run count as failed (see `runbooks/daily-import.md`) |
 | Incremental refresh duration | a scheduled run completes within 30 minutes | run start and completion timestamps |
 
 The historical backfill has a target, not an SLO: a full backfill from 1950
