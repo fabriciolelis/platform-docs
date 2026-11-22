@@ -17,9 +17,9 @@ measured on, and how to check and recover a failed daily import (ADR-006).
 | Outcome and reason | The Job status is the outcome. The importer's last log line, the JSON record with `"message": "Import summary"`, gives the reason: `outcome`, `seasons_imported`, `counts`, and, on failure, `failed_season` and `reason`. |
 
 The SLOs are measured only in environments that are always on. `local` runs
-on the maintainer's machine and is not measured. From Sprint 4, metrics read
-the same Job status (for example through kube-state-metrics) rather than a
-new signal.
+on the maintainer's machine and is not measured. Metrics read the same Job
+status through kube-state-metrics rather than a new signal (see
+[Read the ingestion SLOs](#read-the-ingestion-slos)).
 
 ## Check the last daily imports
 
@@ -30,6 +30,41 @@ kubectl -n formula-insights logs job/<job name> | tail -1
 
 Scheduled Jobs are named `formula-insights-importer-<timestamp>`; the CronJob
 keeps the last 3 successful and 3 failed ones.
+
+## Read the ingestion SLOs
+
+Prometheus records both SLOs from kube-state-metrics (ADR-009); the rules and
+their tests are in `platform-gitops/applications/monitoring/`. Open Prometheus
+with a port forward and run the queries at `http://localhost:9090`:
+
+```bash
+kubectl -n monitoring port-forward svc/prometheus 9090:9090
+```
+
+| SLO | Query | Reads as |
+| --- | --- | --- |
+| Ingestion success rate (at least 96%) | `slo:ingestion_success_rate:ratio_30d` | Successful daily imports over the daily imports due in the last 30 days. |
+| Incremental refresh duration (30 minutes) | `max_over_time(slo:daily_import_within_30m:bool[30d])` | One series per daily import that completed: 1 when it finished within 30 minutes. `ingestion:daily_import_duration:seconds` gives the duration. |
+
+How the success rate applies the signal:
+
+- **Due imports** are the 06:00 UTC schedule times since the CronJob was
+  created, at most 30. A day without a daily import is due but not successful,
+  so it counts as failed. The rate is never above 100%: a daily import that the
+  CronJob catches up after a stopped cluster counts once.
+- **Manual imports** are excluded by their annotation; kube-state-metrics
+  exports it because of `--metric-annotations-allowlist`.
+- **Before the first 06:00** after the CronJob is created, nothing is due and
+  the query returns no value.
+- A daily import that passes its 30-minute deadline is stopped and ends
+  `Failed`, so it lowers the success rate and never appears in the duration
+  query.
+
+Two limits of the `local` environment: Prometheus keeps its data in the pod,
+so a restart or a configuration change starts the 30 days over, and the
+CronJob's history limit also counts manual Jobs, so a few manual imports can
+delete the last daily Jobs from the cluster. The recorded series stay in
+Prometheus in that case.
 
 ## Recover a failed daily import
 
