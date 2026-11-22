@@ -77,6 +77,20 @@ The initial development environment may run locally with Kind or k3d. Cloud depl
 | Ingestion success rate | at least 96% of scheduled daily runs per 30 days (29 of 30) | the ingestion signal: the final status of each scheduled daily import Job, retries included; any non-zero exit, including standings not updated, and a day without a scheduled run count as failed (see `runbooks/daily-import.md`) |
 | Incremental refresh duration | a scheduled run completes within 30 minutes | run start and completion timestamps |
 
+Each SLO is a recorded query in the monitoring stack (ADR-009). Open
+Prometheus with `kubectl -n monitoring port-forward svc/prometheus 9090:9090`
+and query `http://localhost:9090`:
+
+| Objective | Query |
+| --- | --- |
+| API availability | `slo:api_availability:ratio_30d` |
+| Ingestion success rate | `slo:ingestion_success_rate:ratio_30d` (see `runbooks/daily-import.md`) |
+| Incremental refresh duration | `max_over_time(slo:daily_import_within_30m:bool[30d])` (see `runbooks/daily-import.md`) |
+
+The availability counts only the probes that ran. The probe runs inside the
+cluster, so while the whole cluster or Prometheus is down there are no probes,
+and a full outage does not lower the value.
+
 The historical backfill has a target, not an SLO: a full backfill from 1950
 completes within 3 hours while paced under Jolpica's rate limits. It is run
 manually and does not alert. See ADR-006 for the ingestion policy.
