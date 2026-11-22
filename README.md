@@ -83,7 +83,8 @@ and query `http://localhost:9090`:
 
 | Objective | Query |
 | --- | --- |
-| API availability | `slo:api_availability:ratio_30d` |
+| API availability | `slo:api_availability:ratio_30d`; secondary signal: `slo:api_non_5xx:ratio_30d` |
+| API latency | `slo:api_latency:ratio_30d` (read requests below 500 ms; 5xx responses are left out and count against availability) |
 | Ingestion success rate | `slo:ingestion_success_rate:ratio_30d` (see `runbooks/daily-import.md`) |
 | Incremental refresh duration | `max_over_time(slo:daily_import_within_30m:bool[30d])` (see `runbooks/daily-import.md`) |
 
