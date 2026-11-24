@@ -1,7 +1,7 @@
 # Sprint 4 plan
 
 - Period: 2026-11-18 to 2026-12-08 (3 weeks)
-- Status: in progress
+- Status: complete (see `reviews/sprint-4-review.md`)
 - Tracking: `Sprint 4` milestone in platform-docs, formula-insights-api, and platform-gitops
 
 ## Goal
