@@ -1,0 +1,10 @@
+# Markdown lint for every document (CI: .github/workflows/docs-checks.yml).
+config:
+  # Prose wraps at about 80 columns, but tables and long links cannot.
+  MD013: false
+  # Collapsible evidence blocks in the sprint reviews.
+  MD033:
+    allowed_elements: [details, summary]
+# Agent instructions follow their skill's template, not the document style.
+ignores:
+  - CLAUDE.md
