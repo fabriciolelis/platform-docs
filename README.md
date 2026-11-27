@@ -21,15 +21,16 @@ No production infrastructure or application code is created in this sprint.
 - Import historical season, race, driver, constructor, and race-result data from Jolpica F1.
 - Store normalized data in PostgreSQL.
 - Expose an HTTP API for health, season races, driver standings, constructor standings, and race results.
-- Run the ingestion process as a scheduled Kubernetes workload.
+- Run the ingestion process as a Kubernetes CronJob.
 - Deliver the API to Kubernetes through GitHub Actions and Argo CD.
 - Provision AWS resources using Terraform.
 - Operate the service with metrics, logs, dashboards, alerts, and four service-level objectives.
+- Publish a read-only public site for portfolio visitors, generated daily from the API (ADR-010, from Sprint 5).
 
 ## Explicitly out of scope
 
 - Football Insights and all other sports products.
-- User accounts, authentication, payments, fantasy leagues, and a full frontend.
+- User accounts, authentication, payments, fantasy leagues, and a full frontend. A read-only public site for portfolio visitors is in scope from Sprint 5 (ADR-010).
 - Live timing and streaming data.
 - Multi-region, multi-cloud, or an invented high-volume user scenario.
 - A custom data warehouse, machine learning, or event streaming platform.
