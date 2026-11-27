@@ -70,7 +70,7 @@ with each bootstrap.
 ## Drill
 
 Rehearsed on the `local` environment on 2026-11-16 (platform-gitops#13 and
-#14): a promotion that broke the migration on purpose failed after three
+platform-gitops#14): a promotion that broke the migration on purpose failed after three
 retries in about 8 minutes while the same API pod kept serving. After the
 revert, the Application was Synced and Healthy 27 seconds after the merge,
 and one sync cleared the failed operation in 10 seconds.
